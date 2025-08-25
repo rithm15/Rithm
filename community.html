@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rithm — Your Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+  body{background: linear-gradient(135deg,#a0eaff,#ffd1f0,#fff8b0,#ffffff); color:#fff; min-height:100vh; display:flex; flex-direction:column;}
+
+  header{padding:2rem;text-align:center;}
+  header h1{font-size:2.5rem;background:linear-gradient(90deg,#ff69b4,#00d4ff,#fff176);-webkit-background-clip:text;color:transparent;}
+  header p{font-size:1.2rem;margin-top:1rem; color:#111;}
+
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;padding:2rem;}
+  .feature-card{background:#111; border-radius:16px; padding:1.5rem; display:flex; flex-direction:column; align-items:center; text-align:center; transition:0.3s; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+  .feature-card:hover{transform:translateY(-5px); box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+  
+  .feature-card span{
+    font-size:2rem;
+    margin-bottom:0.6rem;
+    background: linear-gradient(135deg, #ff69b4, #00d4ff, #fff176);
+    -webkit-background-clip:text;
+    color: transparent;
+    font-weight:700;
+  }
+  
+  .feature-card h3{
+    margin-bottom:0.8rem;
+    font-size:1.3rem;
+    background: linear-gradient(135deg,#ff9ecf,#67dfff,#fff176);
+    -webkit-background-clip:text;
+    color: transparent;
+  }
+  
+  .feature-card p{
+    font-size:1rem;
+    color:#ccc;
+  }
+
+  footer{margin-top:auto;text-align:center;padding:1.5rem;color:#555;}
+  
+  @media(max-width:600px){
+    header h1{font-size:2rem;}
+    header p{font-size:1rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Rithm — Your Study Hub</h1>
+  <p>All-in-one space to organize your studies: Engineering Books, Calendar, Notes & Timetable — designed for students.</p>
+</header>
+
+<section class="features">
+  <div class="feature-card">
+    <span>📘</span>
+    <h3>Engineering Books</h3>
+    <p>Access your engineering textbooks, notes, and references all in one place with easy search and organized categories.</p>
+  </div>
+  <a href="calendar.html" style="text-decoration:none; color:inherit;">
+  <div class="feature-card">
+    <span>📅</span>
+    <h3>Calendar</h3>
+    <p>Plan your week with a simple calendar. Add classes, exams, deadlines, and sync your schedule seamlessly.</p>
+  </div>
+</a>
+
+<a href="notes.html" style="text-decoration:none; color:inherit;">
+  <div class="feature-card">
+    <span>📝</span>
+    <h3>Notes</h3>
+    <p>Create, upload, and organize notes by subjects. Preview files, edit text notes, and keep all your study material handy.</p>
+  </div>
+</a>
+  <a href="tt.html" style="text-decoration:none; color:inherit;">
+  <div class="feature-card">
+      <span>⏰</span>
+      <h3>Timetable</h3>
+      <p>Build your personalized timetable for classes, study sessions, and activities. Color-coded and mobile-friendly for easy tracking.</p>
+  </div>
+</a>
+
+</section>
+
+<footer>
+  © <span id="year"></span> Rithm. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
