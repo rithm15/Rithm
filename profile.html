@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Setup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .profile-card {
+      background: #0a0a0a;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 150, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+    }
+
+    .profile-card h2 {
+      font-size: 2rem;
+      color: #00cfff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00cfff;
+    }
+
+    .profile-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 3px solid #00cfff;
+      box-shadow: 0 0 15px #00cfff66;
+    }
+
+    .profile-card input[type="text"],
+    .profile-card input[type="number"],
+    .profile-card input[type="file"] {
+      width: 90%;
+      padding: 10px 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #00cfff;
+      background: #111;
+      color: #fff;
+      font-weight: 500;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .profile-card input::placeholder {
+      color: #00cfffaa;
+    }
+
+    .profile-card button {
+      padding: 12px 20px;
+      margin: 10px 5px 0 5px;
+      border: none;
+      border-radius: 12px;
+      background: #00cfff;
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #00cfff66;
+    }
+
+    .profile-card button:hover {
+      box-shadow: 0 0 20px #00cfffaa;
+      transform: scale(1.05);
+    }
+
+    .profile-card .delete-btn {
+      background: #ff4b4b;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-card">
+    <h2>✨ Setup Your Profile ✨</h2>
+    <img id="profilePreview" src="https://via.placeholder.com/120" alt="Profile Photo">
+    <input type="file" id="profilePhoto" accept="image/*"><br>
+    <input type="text" id="name" placeholder="Name">
+    <input type="number" id="age" placeholder="Age">
+    <input type="text" id="profession" placeholder="Profession"><br>
+    <button id="saveProfile">💾 Save Profile</button>
+    <button id="deleteProfile" class="delete-btn">🗑️ Delete Account</button>
+  </div>
+
+  <script>
+    const profilePhoto = document.getElementById("profilePhoto");
+    const profilePreview = document.getElementById("profilePreview");
+    const nameInput = document.getElementById("name");
+    const ageInput = document.getElementById("age");
+    const professionInput = document.getElementById("profession");
+    const saveBtn = document.getElementById("saveProfile");
+    const deleteBtn = document.getElementById("deleteProfile");
+
+    // Load saved profile if exists
+    window.onload = () => {
+      const profile = JSON.parse(localStorage.getItem("userProfile"));
+      if(profile) {
+        nameInput.value = profile.name;
+        ageInput.value = profile.age;
+        professionInput.value = profile.profession;
+        profilePreview.src = profile.photo || "https://via.placeholder.com/120";
+      }
+    }
+
+    // Preview photo before saving
+    profilePhoto.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if(file) {
+        const reader = new FileReader();
+        reader.onload = () => profilePreview.src = reader.result;
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Save profile
+    saveBtn.addEventListener("click", () => {
+      const profile = {
+        name: nameInput.value.trim(),
+        age: ageInput.value.trim(),
+        profession: professionInput.value.trim(),
+        photo: profilePreview.src
+      };
+      localStorage.setItem("userProfile", JSON.stringify(profile));
+      alert("✅ Profile saved successfully!");
+    });
+
+    // Delete profile
+    deleteBtn.addEventListener("click", () => {
+      if(confirm("⚠️ Are you sure you want to delete your account?")) {
+        localStorage.removeItem("userProfile");
+        nameInput.value = "";
+        ageInput.value = "";
+        professionInput.value = "";
+        profilePreview.src = "https://via.placeholder.com/120";
+        profilePhoto.value = "";
+        alert("🗑️ Account deleted!");
+      }
+    });
+  </script>
+</body>
+</html>

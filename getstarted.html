@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community App - About & Bundles</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #89f7fe, #ffabf7, #ffe989, #ffffff);
+    color: #222;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    text-align: center;
+  }
+
+  h1, h2 {
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: 3rem;
+    background: linear-gradient(90deg, #00cfff, #ff5ef0, #ffd500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    color: #00cfff;
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .highlight {
+    color: #00cfff;
+    font-weight: 600;
+  }
+
+  .emoji {
+    font-size: 2rem;
+    margin: 0 5px;
+  }
+
+  .feature-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 25px;
+    padding: 30px 20px;
+    width: 300px;
+    box-shadow: 0 0 25px rgba(0,200,255,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 40px rgba(0,200,255,0.4);
+  }
+
+  .feature-card h3 {
+    margin-bottom: 15px;
+    color: #ff5ef0;
+  }
+
+  .bundle-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+  }
+
+  .bundle-card {
+    background: rgba(0,0,0,0.9);
+    color: #fff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    width: 280px;
+    box-shadow: 0 0 25px rgba(0,200,255,0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .bundle-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 45px rgba(0,200,255,0.6);
+  }
+
+  .bundle-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    color: #00cfff;
+  }
+
+  .bundle-card p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+
+  .bundle-card .price {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 15px 0;
+    color: #ff5ef0;
+  }
+
+  .bundle-card button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: linear-gradient(90deg,#00cfff,#ff5ef0,#ffd500);
+    color: #fff;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .bundle-card button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0,200,255,0.6);
+  }
+
+  @media(max-width: 960px){
+    .feature-section, .bundle-section {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🌟 Welcome to Community App 🌟</h1>
+
+  <h2>Why Our Community is Loved 💖</h2>
+  <p>Whether you’re a <span class="highlight">manager, student, or professional</span>, Community App helps you track habits, stay organized, and connect with like-minded people. 🚀✨</p>
+  <p>Students get exclusive features like <span class="highlight">study timers, routine planning, and step tracking</span>. Managers and professionals love <span class="highlight">habit monitoring, reminders, and productivity insights</span>. 🏆📊</p>
+
+  <h2>Key Features for Everyone 🌈</h2>
+  <div class="feature-section">
+    <div class="feature-card">
+      <h3>💧 Water & Health</h3>
+      <p>Track your daily water intake and monitor your hydration habits.</p>
+    </div>
+    <div class="feature-card">
+      <h3>🚶 Step Tracker</h3>
+      <p>Stay active with automatic or manual step tracking and daily goals.</p>
+    </div>
+    <div class="feature-card">
+      <h3>⏰ Alarms & Routine</h3>
+      <p>Plan your day, set reminders, and maintain productive habits effortlessly.</p>
+    </div>
+    <div class="feature-card">
+      <h3>📅 Calendar & Notes</h3>
+      <p>Keep all your schedules, events, and notes organized in one place.</p>
+    </div>
+    <div class="feature-card">
+      <h3>📱 Screen Time Analysis</h3>
+      <p>Monitor your digital usage and balance your day smartly.</p>
+    </div>
+  </div>
+
+  <h2>Choose Your Bundle 💎</h2>
+  <div class="bundle-section">
+    <div class="bundle-card">
+      <h3>Noob Bundle</h3>
+      <p>Already activated ✅</p>
+      <p>Basic tracking features for starters</p>
+      <p class="price">FREE</p>
+      <button disabled>Activated</button>
+    </div>
+    <div class="bundle-card">
+      <h3>Pro Bundle</h3>
+      <p>Unlocks advanced tracking & exclusive student tools</p>
+      <p class="price">₹59</p>
+      <button>start trial</button>
+    </div>
+    <div class="bundle-card">
+      <h3>Premium Bundle</h3>
+      <p>All features + notifications + carrer guide + mental health and more</p>
+      <p class="price">₹99</p>
+      <button>start trial</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

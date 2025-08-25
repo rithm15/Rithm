@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rithm — Features</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #ffd7e9;
+      --blue: #d7ecff;
+      --white: #ffffff;
+      --text: #0b1220;
+      --muted: #5b6473;
+      --shadow: 0 10px 30px rgba(32, 59, 126, 0.15);
+      --radius: 18px;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, var(--pink) 0%, transparent 60%),
+        radial-gradient(1200px 700px at 110% 10%, var(--blue) 0%, transparent 60%),
+        linear-gradient(180deg, #ffffff, #fafcff);
+    }
+
+    /* Container */
+    .container { width: min(1120px, 92vw); margin-inline: auto; }
+
+    /* Navbar */
+    .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(1.1) blur(8px); background: rgba(255,255,255,.55); border-bottom: 1px solid rgba(255,255,255,.7); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: .9rem 0; }
+    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 800; }
+    .logo { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: conic-gradient(from 200deg, #ffb8d9, #a7d7ff); box-shadow: var(--shadow); }
+    .nav-links { display: flex; gap: 1rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-weight: 600; padding: .4rem .7rem; border-radius: 10px; }
+    .nav-links a:hover { background: rgba(255,255,255,.8); color: #0b1220; }
+
+    /* Page Header */
+    .header { padding: 4rem 0 2rem; text-align: center; }
+    .header h1 { font-size: clamp(2rem, 3vw + 1rem, 3rem); font-weight: 800; margin: 0; }
+    .header p { color: var(--muted); max-width: 52ch; margin: 1rem auto 0; }
+
+    /* Features Grid */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 3rem; }
+    .card { padding: 1.6rem; border-radius: var(--radius); background: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.9); box-shadow: var(--shadow); }
+    .card h3 { margin: .2rem 0 .6rem; font-size: 1.3rem; }
+    .card p { margin: 0; color: var(--muted); }
+
+    /* Footer */
+    footer { padding: 2rem 0 4rem; text-align: center; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Rithm</span>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="#">Community</a>
+        <a href="#">Download</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <h1>Features that keep you in Rithm</h1>
+      <p>A balanced mix of productivity tools and community features—all in a calming pink and blue gradient theme.</p>
+    </div>
+  </header>
+
+  <!-- Features Grid -->
+  <section class="container">
+    <div class="features-grid">
+      <article class="card">
+        <h3>⏰ Smart Alarms</h3>
+        <p>Set recurring alarms and reminders that gently nudge you without overwhelming.</p>
+      </article>
+      <article class="card">
+        <h3>💧 Health Tracker</h3>
+        <p>Log your water intake, sleep hours, and study time manually. Charts coming soon.</p>
+      </article>
+      <article class="card">
+        <h3>👥 Community Groups</h3>
+        <p>Class/subject-specific groups with chat, polls, and resource sharing built-in.</p>
+      </article>
+      <article class="card">
+        <h3>📑 Notes & PDFs</h3>
+        <p>Upload, organize, and share class notes or study guides instantly.</p>
+      </article>
+      <article class="card">
+        <h3>❓ Doubt Solving</h3>
+        <p>Post questions, get answers, and upvote the most helpful solutions.</p>
+      </article>
+      <article class="card">
+        <h3>🔒 Privacy-first</h3>
+        <p>Your data is safe, exportable, and never locked in—always under your control.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <small>© <span id="year"></span> Rithm. All rights reserved.</small>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

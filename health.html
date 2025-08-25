@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rithm — Health & Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f9ff;
+    --card:#ffffff;
+    --ink:#0b1220;
+    --muted:#6b7280;
+    --accent:#635bff;
+    --accent2:#ff7ac6;
+    --ok:#10b981;
+    --warn:#f59e0b;
+    --danger:#ef4444;
+    --shadow:0 12px 30px rgba(24,39,75,.08);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 600px at 10% -10%, #ffe3f4 0%, transparent 60%),
+      radial-gradient(900px 700px at 110% 0%, #e2ecff 0%, transparent 60%),
+      linear-gradient(180deg,#ffffff, var(--bg));
+    min-height:100dvh;
+  }
+
+  /* Topbar */
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter:saturate(1.2) blur(8px);
+    background:rgba(255,255,255,.7);
+    border-bottom:1px solid rgba(255,255,255,.8);
+  }
+  .topbar .inner{
+    width:min(1280px,92vw); margin:auto; display:flex; gap:12px; align-items:center; justify-content:space-between; padding:.9rem 0;
+  }
+  .brand{display:flex; align-items:center; gap:.7rem; font-weight:800}
+  .logo{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;box-shadow:var(--shadow);
+    background:conic-gradient(from 200deg, var(--accent2), #a7d7ff, var(--accent));
+    color:#fff; font-weight:800}
+  .top-actions{display:flex; gap:.5rem; align-items:center; color:var(--muted); font-weight:600;}
+  .pill{padding:.45rem .75rem; border-radius:999px; background:#fff; border:1px solid #eef2ff}
+
+  /* Layout */
+  .wrap{width:min(1280px,92vw); margin:24px auto 80px; display:grid; gap:16px; grid-template-columns: 1fr;}
+  @media (min-width: 980px){
+    .wrap{grid-template-columns: 1.2fr 1fr;}
+    .stack{grid-column:1 / span 2; display:grid; grid-template-columns: 1fr 1fr; gap:16px;}
+  }
+
+  /* Cards */
+  .card{
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+  .card h2{margin:0 0 .6rem; font-size:1.25rem}
+  .sub{color:var(--muted); margin-top:2px}
+
+  /* Water Tracker */
+  .water-top{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .goal input{width:110px}
+  input[type=number],input[type=text],input[type=time],select,textarea{
+    padding:.6rem .7rem; border-radius:12px; border:1px solid #e5e7eb; background:#fff; outline: none;
+  }
+  button{
+    border:none; border-radius:12px; padding:.6rem .9rem; font-weight:700; cursor:pointer;
+    background:var(--ink); color:#fff; transition:.15s;
+  }
+  button:hover{transform:translateY(-1px); box-shadow:0 8px 18px rgba(24,39,75,.15)}
+  .btn-ok{background:var(--ok)}
+  .btn-warn{background:var(--warn)}
+  .btn-accent{background:linear-gradient(135deg, var(--accent), #8b5cf6)}
+  .btn-danger{background:var(--danger)}
+  .inline-btns{display:flex; gap:8px; flex-wrap:wrap}
+
+  .progress{
+    height:14px; background:#eef2ff; border-radius:999px; overflow:hidden; margin-top:10px;
+  }
+  .progress > span{
+    display:block; height:100%; width:0%; background:linear-gradient(90deg, #22d3ee, #60a5fa, #a78bfa, #f472b6);
+    transition:width .3s ease;
+  }
+  .water-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:10px}
+  .chip{padding:.45rem .6rem; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:999px; font-weight:600}
+
+  .history{margin-top:12px; max-height:220px; overflow:auto; border-top:1px dashed #e5e7eb; padding-top:10px}
+  .history-item{display:flex; justify-content:space-between; padding:8px 6px; border-bottom:1px dashed #f1f5f9; font-size:.95rem}
+
+  /* Steps */
+  .steps-big{font-size:2.2rem; font-weight:800}
+  .steps-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px}
+  .note{font-size:.9rem; color:var(--muted)}
+
+  /* Routine (Timetable) */
+  .table{width:100%; border-collapse:separate; border-spacing:0 10px; margin-top:8px}
+  .table thead th{font-size:.85rem; color:var(--muted); text-align:left; padding:0 8px}
+  .table tbody tr{background:#fafbff; border:1px solid #eef2ff; border-radius:12px}
+  .table tbody td{padding:10px 8px; vertical-align:top}
+  .tag{display:inline-block; padding:.2rem .55rem; border-radius:999px; background:#e9d5ff; color:#6b21a8; font-weight:700; font-size:.75rem}
+  .actions{display:flex; gap:6px}
+
+  /* Clock + Alarms */
+  .clock{
+    font-size:2.4rem; font-weight:800; letter-spacing:.5px;
+    background:linear-gradient(90deg,#111,#333); -webkit-background-clip:text; color:transparent;
+  }
+  .alarm-list{margin-top:10px; display:grid; gap:8px}
+  .alarm-item{display:flex; justify-content:space-between; align-items:center; padding:10px; border:1px dashed #e5e7eb; border-radius:12px}
+
+  /* Calendar */
+  .cal-head{display:flex; justify-content:space-between; align-items:center; gap:10px}
+  .cal-grid{display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; margin-top:10px}
+  .cal-cell{
+    min-height:90px; background:#fafbff; border:1px solid #eef2ff; border-radius:12px; padding:6px; display:flex; flex-direction:column; gap:4px;
+  }
+  .cal-cell .d{font-weight:700}
+  .event-dot{width:8px;height:8px;border-radius:999px;background:var(--accent2); display:inline-block}
+  .event{background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:4px 6px; font-size:.85rem}
+
+  /* Section grouping on wide screens */
+  .col{display:grid; gap:16px}
+  @media (min-width:980px){
+    .col-left{grid-template-rows:auto auto 1fr}
+    .col-right{grid-template-rows:auto auto 1fr}
+  }
+</style>
+</head>
+<body>
+  <!-- Top -->
+  <header class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="logo">HF</div>
+        <div>Rithm — Health & Fitness</div>
+      </div>
+      <div class="top-actions">
+        <span class="pill">Student mode</span>
+        <span class="pill">Autosave: On</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="wrap">
+    <!-- LEFT COLUMN -->
+    <section class="col col-left">
+      <!-- Water Tracker -->
+      <div class="card" id="waterCard">
+        <h2>💧 Water Tracker</h2>
+        <div class="sub">Set your daily goal and log sips/cups. Everything saves automatically.</div>
+        <div class="water-top">
+          <div class="goal">Goal (ml): <input id="waterGoal" type="number" min="250" step="50" value="2500"></div>
+          <div class="chip">Today: <span id="waterTotal">0</span> ml</div>
+          <div class="chip">Remaining: <span id="waterRemain">2500</span> ml</div>
+        </div>
+        <div class="progress" title="Progress">
+          <span id="waterBar"></span>
+        </div>
+        <div class="inline-btns" style="margin-top:10px">
+          <button class="btn-ok" data-ml="200">+200 ml</button>
+          <button class="btn-ok" data-ml="250">+250 ml</button>
+          <button class="btn-ok" data-ml="300">+300 ml</button>
+          <button class="btn-ok" data-ml="500">+500 ml</button>
+          <button class="btn-warn" id="undoWater">Undo</button>
+          <button class="btn-danger" id="resetWater">Reset day</button>
+        </div>
+        <div class="history" id="waterHistory"></div>
+      </div>
+
+      <!-- Steps -->
+      <div class="card">
+        <h2>🚶 Live Step Tracker</h2>
+        <div class="sub">Manual entry or try beta motion tracking on mobile (may require permission and isn’t perfectly accurate).</div>
+        <div class="steps-big"><span id="stepsCount">0</span> steps</div>
+        <div class="steps-row">
+          <button class="btn-ok" data-step="50">+50</button>
+          <button class="btn-ok" data-step="100">+100</button>
+          <button class="btn-ok" data-step="500">+500</button>
+          <input id="stepsAdd" type="number" min="1" placeholder="Add custom">
+          <button id="stepsAddBtn">Add</button>
+          <button id="stepsReset" class="btn-danger">Reset</button>
+        </div>
+        <div class="steps-row">
+          <button id="startMotion" class="btn-accent">▶️ Start motion (beta)</button>
+          <button id="stopMotion">⏹ Stop</button>
+          <span class="note" id="motionNote">Status: idle</span>
+        </div>
+      </div>
+
+      <!-- Routine -->
+      <div class="card">
+        <h2>📋 Daily Routine / Timetable</h2>
+        <div class="sub">Plan your study, workouts, and breaks. Drag to reorder (use ↑/↓), everything persists.</div>
+        <div class="inline-btns" style="margin-top:6px">
+          <input id="rtTime" type="time">
+          <input id="rtTitle" type="text" placeholder="Activity (e.g., Physics revision)">
+          <select id="rtType">
+            <option>Study</option><option>Workout</option><option>Break</option><option>Sleep</option><option>Other</option>
+          </select>
+          <button id="rtAdd" class="btn-ok">Add</button>
+          <button id="rtClear" class="btn-danger">Clear all</button>
+        </div>
+        <table class="table">
+          <thead><tr><th>Time</th><th>Activity</th><th>Type</th><th></th></tr></thead>
+          <tbody id="rtBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+   <!-- RIGHT COLUMN -->
+<section class="col col-right">
+  <!-- Clock + Alarms -->
+  <div class="card">
+    <h2>⏰ Live Clock & Alarms</h2>
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="inline-btns" style="margin-top:8px">
+      <input id="alTime" type="time">
+      <input id="alLabel" type="text" placeholder="Alarm label (e.g., Drink water)">
+      <button id="alAdd" class="btn-ok">Add Alarm</button>
+      <button id="alClear" class="btn-danger">Clear Alarms</button>
+    </div>
+    <div class="alarm-list" id="alList"></div>
+    <audio id="alarmSound" loop>
+  <source src="alarm.mp3" type="audio/mp3">
+</audio>
+<div class="sub">Tip: keep this tab open; sound/alert triggers at the set time.</div>
+    <button id="stopAlarm" class="btn-danger" style="display:none;margin-top:10px">Stop Alarm</button>
+  </div>
+</section>
+
+<script>
+  const clock = document.getElementById("clock");
+  const alarmTime = document.getElementById("alTime");
+  const alarmLabel = document.getElementById("alLabel");
+  const addAlarmBtn = document.getElementById("alAdd");
+  const clearAlarmsBtn = document.getElementById("alClear");
+  const alarmList = document.getElementById("alList");
+  const alarmSound = document.getElementById("alarmSound");
+  const stopAlarmBtn = document.getElementById("stopAlarm");
+
+  let alarms = [];
+  let ringing = false;
+
+  // Update live clock
+  function updateClock() {
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString();
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Add new alarm
+  addAlarmBtn.addEventListener("click", () => {
+    const timeValue = alarmTime.value;
+    const labelValue = alarmLabel.value.trim() || "Alarm";
+
+    if (!timeValue) {
+      alert("Please select a time!");
+      return;
+    }
+
+    const now = new Date();
+    const [hours, minutes] = timeValue.split(":");
+    let alarmDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+
+    if (alarmDate <= now) {
+      alarmDate.setDate(alarmDate.getDate() + 1);
+    }
+
+    alarms.push({ date: alarmDate, label: labelValue });
+    displayAlarms();
+  });
+
+  // Clear all alarms
+  clearAlarmsBtn.addEventListener("click", () => {
+    alarms = [];
+    displayAlarms();
+  });
+
+  // Display alarm list
+  function displayAlarms() {
+    alarmList.innerHTML = "";
+    alarms.forEach((alarm, index) => {
+      const div = document.createElement("div");
+      div.className = "alarm-item";
+      div.innerHTML = `
+        ⏰ ${alarm.date.toLocaleString()} - ${alarm.label}
+        <button onclick="deleteAlarm(${index})">Delete</button>
+      `;
+      alarmList.appendChild(div);
+    });
+  }
+
+  // Delete alarm
+  function deleteAlarm(index) {
+    alarms.splice(index, 1);
+    displayAlarms();
+  }
+
+  // Check alarms
+  setInterval(() => {
+    const now = new Date();
+    alarms.forEach((alarm, index) => {
+      if (
+        now.getFullYear() === alarm.date.getFullYear() &&
+        now.getMonth() === alarm.date.getMonth() &&
+        now.getDate() === alarm.date.getDate() &&
+        now.getHours() === alarm.date.getHours() &&
+        now.getMinutes() === alarm.date.getMinutes() &&
+        now.getSeconds() === alarm.date.getSeconds()
+      ) {
+        startRinging(alarm.label);
+        alarms.splice(index, 1);
+        displayAlarms();
+      }
+    });
+  }, 1000);
+
+  // Start alarm sound
+  function startRinging(label) {
+    if (ringing) return;
+    ringing = true;
+    alarmSound.play();
+    alert("⏰ " + label + "!");
+    stopAlarmBtn.style.display = "inline-block";
+  }
+
+  // Stop alarm sound
+  stopAlarmBtn.addEventListener("click", () => {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
+    ringing = false;
+    stopAlarmBtn.style.display = "none";
+  });
+</script>
+<!-- Screen Time -->
+<div class="card">
+  <h2>📱 Screen Time Tracker</h2>
+  <div class="sub">Tracks how long this page has been open today.</div>
+  <div class="chip">Today: <span id="screenTimeText">0m 0s</span></div>
+  <div class="progress" title="Screen Time">
+    <span id="screenTimeBar"></span>
+  </div>
+</div>
+
+<script>
+  const screenTimeText = document.getElementById("screenTimeText");
+  const screenTimeBar = document.getElementById("screenTimeBar");
+
+  // daily max goal (8 hours in seconds = 28800)
+  const dailyGoal = 8 * 60 * 60;
+
+  // Load stored time
+  let stored = JSON.parse(localStorage.getItem("screenTime")) || { date: "", seconds: 0 };
+  let today = new Date().toLocaleDateString();
+
+  if (stored.date !== today) {
+    stored = { date: today, seconds: 0 }; // reset if new day
+  }
+
+  function updateScreenTime() {
+    stored.seconds++;
+    localStorage.setItem("screenTime", JSON.stringify(stored));
+
+    let hrs = Math.floor(stored.seconds / 3600);
+    let mins = Math.floor((stored.seconds % 3600) / 60);
+    let secs = stored.seconds % 60;
+
+    screenTimeText.textContent = `${hrs}h ${mins}m ${secs}s`;
+
+    let percent = Math.min((stored.seconds / dailyGoal) * 100, 100);
+    screenTimeBar.style.width = percent + "%";
+  }
+
+  setInterval(updateScreenTime, 1000);
+</script>
+
+
+      <!-- Calendar -->
+      <div class="card">
+        <h2>📅 Calendar</h2>
+        <div class="cal-head">
+          <button id="prevMonth">← Prev</button>
+          <div><strong id="calTitle">Month YYYY</strong></div>
+          <button id="nextMonth">Next →</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="sub">Click a date to add a note. Dots show days with notes.</div>
+      </div>
+    </section>
+
+    <!-- FULL-WIDTH (STACK) EXAMPLE IF NEEDED -->
+    <!-- <section class="stack"> ... </section> -->
+
+  </main>
+
+<script>
+/* ---------- Utilities ---------- */
+const $ = (id)=>document.getElementById(id);
+const save = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+const load = (k,d)=>{try{const v=JSON.parse(localStorage.getItem(k)); return v??d;}catch{ return d; }}
+
+/* ---------- Water Tracker ---------- */
+let waterState = load('rithm_water', {goal:2500, total:0, history:[]});
+const waterGoalEl = $('waterGoal'), waterTotalEl = $('waterTotal'), waterRemainEl = $('waterRemain'), waterBar = $('waterBar'), waterHist = $('waterHistory');
+
+function renderWater(){
+  waterGoalEl.value = waterState.goal;
+  waterTotalEl.textContent = waterState.total;
+  const remain = Math.max(0, waterState.goal - waterState.total);
+  waterRemainEl.textContent = remain;
+  const pct = Math.min(100, Math.round(waterState.total / waterState.goal * 100));
+  waterBar.style.width = pct + '%';
+  // history
+  waterHist.innerHTML = waterState.history.slice().reverse().map(h=>(
+    `<div class="history-item"><span>+${h.ml} ml</span><span>${new Date(h.t).toLocaleTimeString()}</span></div>`
+  )).join('');
+  save('rithm_water', waterState);
+}
+document.querySelectorAll('#waterCard .btn-ok[data-ml]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const ml = parseInt(btn.dataset.ml,10);
+    waterState.total += ml;
+    waterState.history.push({ml, t: Date.now()});
+    renderWater();
+  });
+});
+$('undoWater').onclick = ()=>{ const last = waterState.history.pop(); if(last){ waterState.total = Math.max(0, waterState.total - last.ml); renderWater(); } };
+$('resetWater').onclick = ()=>{ waterState.total=0; waterState.history=[]; renderWater(); };
+waterGoalEl.onchange = ()=>{ waterState.goal = Math.max(250, parseInt(waterGoalEl.value||2500,10)); renderWater(); };
+renderWater();
+
+/* ---------- Steps ---------- */
+let stepsState = load('rithm_steps', {count:0});
+const stepsCount = $('stepsCount');
+function renderSteps(){ stepsCount.textContent = stepsState.count; save('rithm_steps', stepsState); }
+document.querySelectorAll('.card button.btn-ok[data-step]').forEach(b=>b.addEventListener('click',()=>{
+  stepsState.count += parseInt(b.dataset.step,10); renderSteps();
+}));
+$('stepsAddBtn').onclick = ()=>{ const v = parseInt(($('stepsAdd').value||'0'),10); if(v>0){ stepsState.count += v; $('stepsAdd').value=''; renderSteps(); }};
+$('stepsReset').onclick = ()=>{ stepsState.count=0; renderSteps(); };
+renderSteps();
+
+// Motion (beta) – simple peak detection
+let motionOn=false, lastMag=0, stepBuf=0;
+$('startMotion').onclick = async ()=>{
+  try{
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      const p = await DeviceMotionEvent.requestPermission(); if(p!=='granted') throw new Error('Permission denied');
+    }
+    window.addEventListener('devicemotion', motionHandler);
+    motionOn=true; $('motionNote').textContent='Status: tracking… walk with phone in pocket';
+  }catch(e){ $('motionNote').textContent='Motion not available/denied'; }
+};
+$('stopMotion').onclick = ()=>{
+  window.removeEventListener('devicemotion', motionHandler);
+  motionOn=false; $('motionNote').textContent='Status: idle';
+};
+function motionHandler(e){
+  const a = e.accelerationIncludingGravity || e.acceleration || {x:0,y:0,z:0};
+  const mag = Math.sqrt((a.x||0)**2 + (a.y||0)**2 + (a.z||0)**2);
+  const diff = Math.abs(mag - lastMag);
+  lastMag = mag;
+  // crude thresholding
+  if(diff > 2.2){ stepBuf++; if(stepBuf>=2){ stepsState.count++; stepBuf=0; renderSteps(); } }
+}
+
+/* ---------- Routine / Timetable ---------- */
+let routine = load('rithm_routine', []);
+const rtBody = $('rtBody');
+function renderRoutine(){
+  routine.sort((a,b)=>a.time.localeCompare(b.time));
+  rtBody.innerHTML = routine.map((r,i)=>`
+    <tr>
+      <td><strong>${r.time}</strong></td>
+      <td>${r.title}</td>
+      <td><span class="tag">${r.type}</span></td>
+      <td class="actions">
+        <button data-i="${i}" class="up">↑</button>
+        <button data-i="${i}" class="down">↓</button>
+        <button data-i="${i}" class="btn-danger del">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+  save('rithm_routine', routine);
+}
+$('rtAdd').onclick = ()=>{
+  const t = $('rtTime').value, title = $('rtTitle').value.trim(), type = $('rtType').value;
+  if(!t || !title) return;
+  routine.push({time:t, title, type});
+  $('rtTitle').value=''; renderRoutine();
+};
+$('rtClear').onclick = ()=>{ routine = []; renderRoutine(); };
+rtBody.addEventListener('click', (e)=>{
+  const i = e.target.dataset.i;
+  if(i===undefined) return;
+  if(e.target.classList.contains('del')){ routine.splice(i,1); }
+  if(e.target.classList.contains('up') && i>0){ [routine[i-1], routine[i]] = [routine[i], routine[i-1]]; }
+  if(e.target.classList.contains('down') && i<routine.length-1){ [routine[i+1], routine[i]] = [routine[i], routine[i+1]]; }
+  renderRoutine();
+});
+renderRoutine();
+
+/* ---------- Clock + Alarms ---------- */
+const clockEl = $('clock');
+function tickClock(){
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,'0');
+  clockEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  checkAlarms(now);
+}
+setInterval(tickClock, 250); tickClock();
+
+let alarms = load('rithm_alarms', []); // {time:"HH:MM", label, active:true}
+const alList = $('alList');
+function renderAlarms(){
+  alList.innerHTML = alarms.map((a,i)=>`
+    <div class="alarm-item">
+      <div><strong>⏰ ${a.time}</strong> — ${a.label||'Alarm'} ${a.active?'':'(off)'}</div>
+      <div class="actions">
+        <button data-i="${i}" class="${a.active?'btn-warn':'btn-ok'} toggle">${a.active?'Disable':'Enable'}</button>
+        <button data-i="${i}" class="btn-danger del">Delete</button>
+      </div>
+    </div>
+  `).join('');
+  save('rithm_alarms', alarms);
+}
+$('alAdd').onclick = ()=>{
+  const t = $('alTime').value, label = $('alLabel').value.trim();
+  if(!t) return;
+  alarms.push({time:t, label, active:true, lastFired:''}); $('alLabel').value=''; renderAlarms();
+};
+$('alClear').onclick = ()=>{ alarms = []; renderAlarms(); };
+alList.addEventListener('click', (e)=>{
+  const i = e.target.dataset.i; if(i===undefined) return;
+  if(e.target.classList.contains('del')) alarms.splice(i,1);
+  if(e.target.classList.contains('toggle')) alarms[i].active = !alarms[i].active;
+  renderAlarms();
+});
+renderAlarms();
+
+function checkAlarms(now){
+  const pad=n=>String(n).padStart(2,'0');
+  const hhmm = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  alarms.forEach(a=>{
+    if(a.active && a.time===hhmm && a.lastFired!==hhmm){
+      a.lastFired = hhmm;
+      fireAlarm(a.label||'Alarm');
+    }
+  });
+  save('rithm_alarms', alarms);
+}
+function fireAlarm(label){
+  alert(`⏰ ${label}`);
+  try{
+    const snd = $('alarmSound'); snd.currentTime=0; snd.play().catch(()=>{});
+  }catch{}
+}
+
+/* ---------- Calendar with Notes ---------- */
+let calState = load('rithm_calendar', {month:(new Date()).getMonth(), year:(new Date()).getFullYear(), notes:{}});
+const calGrid = $('calGrid'), calTitle = $('calTitle');
+function renderCalendar(){
+  const m = calState.month, y = calState.year;
+  const first = new Date(y, m, 1);
+  const startDay = (first.getDay()+6)%7; // Make Monday=0
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  calTitle.textContent = first.toLocaleString(undefined,{month:'long', year:'numeric'});
+
+  const labels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  calGrid.innerHTML = labels.map(l=>`<div style="text-align:center; font-weight:700; color:var(--muted)">${l}</div>`).join('');
+
+  // blank cells before month start
+  for(let i=0;i<startDay;i++){ calGrid.innerHTML += `<div></div>`; }
+
+  for(let d=1; d<=daysInMonth; d++){
+    const key = `${y}-${m+1}-${d}`;
+    const notes = calState.notes[key]||[];
+    calGrid.innerHTML += `
+      <div class="cal-cell" data-key="${key}">
+        <div class="d">${d} ${notes.length?'<span class="event-dot"></span>':''}</div>
+        ${notes.slice(0,2).map(n=>`<div class="event">• ${n}</div>`).join('')}
+        ${notes.length>2?`<div class="event">+${notes.length-2} more</div>`:''}
+      </div>
+    `;
+  }
+}
+function addNote(key){
+  const txt = prompt('Add note for this day:');
+  if(!txt) return;
+  (calState.notes[key] = calState.notes[key]||[]).push(txt);
+  save('rithm_calendar', calState); renderCalendar();
+}
+calGrid.addEventListener('click',(e)=>{
+  const cell = e.target.closest('.cal-cell'); if(!cell) return;
+  addNote(cell.dataset.key);
+});
+$('prevMonth').onclick = ()=>{
+  calState.month--; if(calState.month<0){ calState.month=11; calState.year--; }
+  save('rithm_calendar', calState); renderCalendar();
+};
+$('nextMonth').onclick = ()=>{
+  calState.month++; if(calState.month>11){ calState.month=0; calState.year++; }
+  save('rithm_calendar', calState); renderCalendar();
+};
+renderCalendar();
+</script>
+</body>
+</html>

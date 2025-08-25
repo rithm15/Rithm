@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rithm — Find Your Study Rhythm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --pink: #ffd7e9; /* light pink */
+      --pink-2: #ffb8d9;
+      --blue: #d7ecff; /* light blue */
+      --blue-2: #a7d7ff;
+      --white: #ffffff;
+      --text: #0b1220;
+      --muted: #5b6473;
+      --ring: #a3bffa;
+      --shadow: 0 10px 30px rgba(32, 59, 126, 0.15);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, var(--pink) 0%, transparent 60%),
+        radial-gradient(1200px 700px at 110% 10%, var(--blue) 0%, transparent 60%),
+        linear-gradient(180deg, #ffffff, #fafcff);
+    }
+    /* Utility */
+    .container{width:min(1120px, 92vw); margin-inline:auto}
+    .btn{display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 1.2rem; border-radius:calc(var(--radius) - 6px); font-weight:600; text-decoration:none; transition:transform .15s ease, box-shadow .2s ease, background .2s ease}
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{background: linear-gradient(135deg, var(--pink-2), var(--blue-2)); color:#0b1220; box-shadow: var(--shadow)}
+    .btn-primary:hover{filter:saturate(1.1) brightness(1.02)}
+    .btn-ghost{background:rgba(255,255,255,.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color:#0b1220; border:1px solid rgba(255,255,255,.7)}
+    .badge{display:inline-block; padding:.45rem .7rem; border-radius:999px; font-size:.8rem; font-weight:600; background: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.9)}
+
+    /* Navbar */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.1) blur(8px); -webkit-backdrop-filter:saturate(1.1) blur(8px); background: rgba(255,255,255, .55); border-bottom: 1px solid rgba(255,255,255,.7)}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding: .9rem 0}
+    .brand{display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:.3px}
+    .logo{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background: conic-gradient(from 200deg, var(--pink-2), var(--blue-2)); box-shadow: var(--shadow)}
+    .nav-links{display:flex; gap:1rem; align-items:center}
+    .nav-links a{color: var(--muted); text-decoration:none; font-weight:600; padding:.4rem .7rem; border-radius:10px}
+    .nav-links a:hover{background: rgba(255,255,255,.8); color:#0b1220}
+    .menu-btn{display:none}
+
+    /* Hero */
+    .hero{position:relative; padding: 5.5rem 0 4rem; overflow:hidden}
+    .hero-grid{display:grid; grid-template-columns:1.2fr .9fr; align-items:center; gap:2rem}
+    .headline{font-size: clamp(2rem, 3vw + 1rem, 3.25rem); line-height:1.05; letter-spacing:-.02em; margin:0 0 1rem; font-weight:800}
+    .gradient-text{background: linear-gradient(90deg, #ff7dbd, #7db8ff); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .sub{font-size: clamp(1rem, .7vw + .8rem, 1.2rem); color: var(--muted); max-width: 48ch}
+    .hero-cta{display:flex; gap:.8rem; margin-top:1.4rem; flex-wrap:wrap}
+
+    /* Glass card */
+    .glass{
+      position:relative; border-radius: var(--radius); padding:1rem; background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.5)); border: 1px solid rgba(255,255,255,.8);
+      box-shadow: var(--shadow);
+    }
+    .phone{
+      aspect-ratio: 9/19.5; border-radius: 28px; background: #fff; border: 10px solid #101418; box-shadow: 0 15px 40px rgba(16,20,24,.25);
+      position:relative; overflow:hidden
+    }
+    .phone-gradient{position:absolute; inset:-10%; background: radial-gradient(120% 80% at 20% 0%, var(--pink) 0%, transparent 60%), radial-gradient(120% 100% at 100% 10%, var(--blue) 0%, transparent 50%), linear-gradient(180deg, #ffffff, #f6f9ff)}
+    .pill{position:absolute; left:50%; transform:translateX(-50%); top:10px; width:36%; height:10px; background:#0f141a; border-radius:999px}
+    .screen{position:absolute; inset:0; padding:18px; display:flex; flex-direction:column; gap:12px}
+    .widget{padding:14px; border-radius:16px; background:linear-gradient(135deg, rgba(255,215,233,.9), rgba(215,236,255,.9)); border:1px solid rgba(255,255,255,.8); box-shadow: 0 6px 18px rgba(40,72,137,.15)}
+    .widget h4{margin:0 0 6px; font-size:14px}
+    .row{display:grid; grid-template-columns: repeat(2, 1fr); gap:12px}
+
+    /* Feature grid */
+    .features{padding: 2.5rem 0 4rem}
+    .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:1.2rem}
+    .card{padding:1.2rem; border-radius: var(--radius); background: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.9); box-shadow: var(--shadow)}
+    .card h3{margin:.2rem 0 .4rem}
+    .card p{margin:0; color: var(--muted)}
+
+    /* CTA band */
+    .cta{margin: 2rem 0 4rem; padding: 2rem; border-radius: calc(var(--radius) + 4px); background: linear-gradient(90deg, rgba(255,215,233,.9), rgba(215,236,255,.9)); border: 1px solid rgba(255,255,255,.85); box-shadow: var(--shadow); display:flex; flex-wrap:wrap; align-items:center; gap:1rem; justify-content:space-between}
+    .cta h2{margin:0; font-size: clamp(1.4rem, 1.2vw + 1rem, 2rem)}
+
+    /* Footer */
+    footer{padding:2rem 0 4rem; color: var(--muted)}
+
+    /* Responsive */
+    @media (max-width: 960px){
+      .hero-grid{grid-template-columns: 1fr;}
+      .grid{grid-template-columns: 1fr 1fr}
+    }
+    @media (max-width: 680px){
+      .grid{grid-template-columns: 1fr}
+      .nav-links{display:none}
+      .menu-btn{display:inline-flex}
+    }
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Rithm</span>
+      </div>
+      <div class="nav-links" role="navigation" aria-label="Primary">
+        <a href="features.html">Features</a>
+        <a href="community.html">Community</a>
+        <a href="health.html">health</a>
+        <a href="DP.html">DP</a>
+        <a class="btn btn-ghost" href="profile.html">Sign in</a>
+        <a class="btn btn-primary" href="getstarted.html">Get started</a>
+      </div>
+      <button class="menu-btn btn btn-ghost" aria-label="Open menu">☰</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge">New • Student-first productivity</span>
+        <h1 class="headline">Find your <span class="gradient-text">study rhythm</span> with gentle gradients and zero clutter.</h1>
+        <p class="sub">All-in-one for students: alarms & reminders, health tracking, community groups, Q&A doubts, and seamless PDF/notes sharing—beautifully simple.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#signup">Create your account →</a>
+          <a class="btn btn-ghost" href="#demo">Watch demo</a>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="phone" aria-hidden="true">
+          <div class="pill"></div>
+          <div class="phone-gradient"></div>
+          <div class="screen">
+            <div class="row">
+              <div class="widget">
+                <h4>Alarm</h4>
+                <p style="margin:0;color:var(--muted)">6:30 AM • Weekdays</p>
+              </div>
+              <div class="widget">
+                <h4>Reminder</h4>
+                <p style="margin:0;color:var(--muted)">Math Quiz • 4 PM</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="widget">
+                <h4>Health</h4>
+                <p style="margin:0;color:var(--muted)">Water 5/8 • Sleep 7h</p>
+              </div>
+              <div class="widget">
+                <h4>Community</h4>
+                <p style="margin:0;color:var(--muted)">CS-101 • 2 new posts</p>
+              </div>
+            </div>
+            <div class="widget">
+              <h4>Notes</h4>
+              <p style="margin:0;color:var(--muted)">Uploaded “Thermo.pdf” to Physics</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 style="margin:0 0 .6rem">Designed for focus</h2>
+      <p class="sub" style="margin:0 0 1.2rem">Modern gradients in light pink and blue meet functional, minimal UI.</p>
+      <div class="grid">
+        <article class="card">
+          <h3>Alarms & Reminders</h3>
+          <p>Recurring schedules, one-tap snooze, and smart nudges that don’t nag.</p>
+        </article>
+        <article class="card">
+          <h3>Health Tracker</h3>
+          <p>Simple manual logs first, clean charts later. Sync with Apple Health/Google Fit.</p>
+        </article>
+        <article class="card">
+          <h3>Community</h3>
+          <p>Class groups with chat, polls, and file sharing to keep everyone aligned.</p>
+        </article>
+        <article class="card">
+          <h3>Notes & PDFs</h3>
+          <p>Upload, tag, and search your notes. Share to a class or keep private.</p>
+        </article>
+        <article class="card">
+          <h3>Doubts & Answers</h3>
+          <p>Threaded Q&A with upvotes. The fastest way to get unstuck.</p>
+        </article>
+        <article class="card">
+          <h3>Privacy-first</h3>
+          <p>Your data stays yours. Export anytime. No dark patterns.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="container cta" id="download">
+    <h2>Ready to set your Rithm?</h2>
+    <div style="display:flex; gap:.6rem; flex-wrap:wrap">
+      <a class="btn btn-primary" href="#signup">Get started free</a>
+      <a class="btn btn-ghost" href="#demo">See it in action</a>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem">
+      <small>© <span id="year"></span> Rithm. All rights reserved.</small>
+      <div style="display:flex; gap:1rem">
+        <a href="#privacy" style="color:inherit">Privacy</a>
+        <a href="#terms" style="color:inherit">Terms</a>
+        <a href="#contact" style="color:inherit">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // super-light mobile menu (you can expand later)
+    const menuBtn = document.querySelector('.menu-btn');
+    const links = document.querySelector('.nav-links');
+    menuBtn?.addEventListener('click', () => {
+      const open = links.style.display === 'flex';
+      links.style.display = open ? 'none' : 'flex';
+      links.style.flexDirection = 'column';
+      links.style.gap = '0.4rem';
+      links.style.padding = '0.6rem 0';
+      links.style.background = 'rgba(255,255,255,.9)';
+      links.style.position = 'absolute';
+      links.style.right = '4vw';
+      links.style.top = '64px';
+      links.style.border = '1px solid rgba(255,255,255,.9)';
+      links.style.borderRadius = '14px';
+      links.style.boxShadow = '0 10px 24px rgba(0,0,0,.08)';
+    });
+  </script>
+</body>
+</html>
