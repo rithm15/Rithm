@@ -1,277 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Community - Your Room</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: #0f0f0f;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* Background Image */
-    .bg-img {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;   /* keeps HD look */
-      z-index: -1;
-    }
-
-    /* Green neon animated border lines */
-    @keyframes neonLine {
-      0% { box-shadow: 0 0 5px #39ff14, 0 0 10px #39ff14; }
-      100% { box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14; }
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 28%;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(6px);
-      padding: 1rem;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      border-right: 3px solid #39ff14;
-      animation: neonLine 2s infinite alternate;
-    }
-    .sidebar h2 {
-      margin: 0 0 1rem;
-      font-size: 1.4rem;
-      color: #39ff14;
-      text-shadow: 0 0 10px #39ff14;
-    }
-    .chat-card {
-      padding: 1rem;
-      margin-bottom: 0.8rem;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-      color: #111;
-    }
-    .chat-card:hover {
-      background: #e8ffe8;
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #39ff1477;
-    }
-
-    /* Chat Area */
-    .chat-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(8px);
-    }
-    .chat-header {
-      padding: 1rem;
-      font-size: 1.2rem;
-      border-bottom: 2px solid #39ff14;
-      color: #39ff14;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .typing {
-      font-size: 0.9rem;
-      color: #444;
-      margin-left: 5px;
-      animation: blink 1s infinite;
-    }
-    @keyframes blink {
-      0%,100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .messages {
-      flex: 1;
-      padding: 1rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .msg {
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 18px;
-      max-width: 70%;
-      word-wrap: break-word;
-      position: relative;
-      animation: bounceIn 0.4s ease;
-    }
-    @keyframes bounceIn {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .msg.self {
-      background: #39ff14;
-      color: #000;
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 0 10px #39ff14aa;
-    }
-    .msg.other {
-      background: #f0f0f0;
-      color: #111;
-      margin-right: auto;
-      border-bottom-left-radius: 4px;
-    }
-    .msg img {
-      max-width: 100%;
-      border-radius: 12px;
-      margin-top: 6px;
-    }
-    .delete-btn {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #ff3b3b;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 12px;
-      line-height: 18px;
-    }
-
-    /* Input */
-    .chat-input {
-      display: flex;
-      padding: 12px;
-      gap: 8px;
-      background: rgba(255,255,255,0.85);
-      border-top: 2px solid #39ff14;
-    }
-    .chat-input input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border-radius: 20px;
-      border: none;
-      background: #f0f0f0;
-      color: #111;
-      outline: none;
-    }
-    .chat-input button, .chat-input label {
-      padding: 10px 16px;
-      border-radius: 20px;
-      border: none;
-      background: #39ff14;
-      color: #000;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-    .chat-input button:hover, .chat-input label:hover {
-      box-shadow: 0 0 12px #39ff14aa;
-    }
-    .chat-input input[type="file"] {
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Chat — Modern Gradient</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+  body{display:flex;height:100vh;background:linear-gradient(135deg,#fff8b0,#ffd1f0,#a0eaff,#ffffff);color:#111;overflow:hidden;}
+  
+  /* Sidebar */
+  .sidebar{width:28%;padding:1rem;display:flex;flex-direction:column;gap:0.6rem;}
+  .sidebar h2{color:#ff69b4;margin-bottom:1rem;font-size:1.5rem;}
+  .chat-card{padding:1rem;background:rgba(255,255,255,0.8);border-radius:16px;cursor:pointer;color:#111;transition:.3s;box-shadow:0 4px 15px rgba(0,0,0,0.05);}
+  .chat-card:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+  
+  /* Chat area */
+  .chat-area{flex:1;display:flex;flex-direction:column;background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);padding:0.5rem;gap:0.5rem;}
+  .chat-header{padding:1rem;font-size:1.2rem;color:#ff69b4;display:flex;align-items:center;gap:8px;}
+  .typing{font-size:.9rem;color:#555;animation:blink 1s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.5;}}
+  
+  .messages{flex:1;padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+  .msg{display:inline-block;padding:10px 14px;border-radius:18px;max-width:70%;word-wrap:break-word;position:relative;animation:bounceIn 0.4s ease;}
+  @keyframes bounceIn{0%{transform:scale(0.8);opacity:0;}100%{transform:scale(1);opacity:1;}}
+  .msg.self{background:linear-gradient(135deg,#fffb7d,#ffb3ff);color:#111;margin-left:auto;border-bottom-right-radius:4px;box-shadow:0 0 12px rgba(255,182,193,0.5);}
+  .msg.other{background:rgba(255,255,255,0.7);color:#111;margin-right:auto;border-bottom-left-radius:4px;box-shadow:0 0 8px rgba(0,0,0,0.05);}
+  .msg img,.msg video{max-width:100%;border-radius:12px;margin-top:6px;}
+  .msg a{color:#ff69b4;text-decoration:none;}
+  
+  .delete-btn{position:absolute;top:-8px;right:-8px;background:#ff3b3b;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;color:#fff;font-size:12px;line-height:18px;}
+  
+  /* Input */
+  .chat-input{display:flex;padding:12px;gap:8px;align-items:center;}
+  .chat-input input[type="text"]{flex:1;padding:10px;border-radius:20px;border:none;background:rgba(255,255,255,0.8);color:#111;outline:none;}
+  .chat-input input[type="file"]{display:none;}
+  .chat-input button,.chat-input label{padding:10px 16px;border-radius:20px;border:none;background:#ff69b4;color:#fff;cursor:pointer;font-weight:600;transition:.2s;}
+  .chat-input button:hover,.chat-input label:hover{box-shadow:0 0 12px #ff69b4aa;}
+  
+  /* Preview */
+  #preview{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+  #preview img,#preview video{max-height:100px;border-radius:12px;}
+</style>
 </head>
 <body>
-  <!-- Background Image -->
-  <img src="https://i.ibb.co/TM5rRpXX/image.png" class="bg-img" alt="Background">
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>🔥 Chats</h2>
-    <div class="chat-card active">💬 Your Room</div>
+<div class="sidebar">
+  <h2>💬 Chats</h2>
+  <div class="chat-card active">Your Room</div>
+</div>
+
+<div class="chat-area">
+  <div class="chat-header">💬 Your Room <span class="typing">| Write, Share, Chill ✨</span></div>
+  <div class="messages" id="messages"></div>
+
+  <div class="chat-input">
+    <input type="text" id="msgInput" placeholder="Type a message 😃🔥📚...">
+    <input type="file" id="fileInput" accept="image/*,video/*,.pdf,.txt,.doc">
+    <label for="fileInput">📎</label>
+    <button type="button" onclick="sendMessage()">🚀 Send</button>
   </div>
+  <div id="preview"></div>
+</div>
 
-  <!-- Chat Area -->
-  <div class="chat-area">
-    <div class="chat-header">
-      💬 Your Room <span class="typing">| Write, Share, Chill ✨</span>
-    </div>
-    <div class="messages" id="messages"></div>
+<script>
+const messagesDiv = document.getElementById("messages");
+const msgInput = document.getElementById("msgInput");
+const fileInput = document.getElementById("fileInput");
+const previewDiv = document.getElementById("preview");
 
-    <div class="chat-input">
-      <input type="text" id="msgInput" placeholder="Type a message 😃🔥📚...">
-      <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.txt">
-      <label for="fileInput">📎</label>
-      <button type="button" onclick="sendMessage()">🚀 Send</button>
-    </div>
-  </div>
+let messages = JSON.parse(localStorage.getItem("messages")) || [];
+renderMessages();
 
-  <script>
-    const messagesDiv = document.getElementById("messages");
-    const msgInput = document.getElementById("msgInput");
-    const fileInput = document.getElementById("fileInput");
-
-    let messages = JSON.parse(localStorage.getItem("messages")) || [];
-    renderMessages();
-
-    function sendMessage() {
-      const text = msgInput.value.trim();
-      const file = fileInput.files[0];
-      if (!text && !file) return;
-
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          let type = file.type.startsWith("image/") ? "image" : "file";
-          let msgObj = { type, content: e.target.result, name: file.name, self: true };
-          messages.push(msgObj);
-          saveAndRender();
-        };
-        reader.readAsDataURL(file);
-      }
-
-      if (text) {
-        let msgObj = { type: "text", content: text, self: true };
-        messages.push(msgObj);
-        saveAndRender();
-      }
-
-      msgInput.value = "";
-      fileInput.value = "";
+// Preview
+fileInput.addEventListener('change',()=>{
+  previewDiv.innerHTML='';
+  const file=fileInput.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    if(file.type.startsWith("image/")){
+      const img=document.createElement('img'); img.src=e.target.result;
+      previewDiv.appendChild(img);
+    }else if(file.type.startsWith("video/")){
+      const vid=document.createElement('video'); vid.src=e.target.result; vid.controls=true;
+      previewDiv.appendChild(vid);
+    }else{
+      const link=document.createElement('a'); link.textContent="📂 "+file.name; link.href=e.target.result; link.download=file.name;
+      previewDiv.appendChild(link);
     }
+  }
+  reader.readAsDataURL(file);
+});
 
-    function renderMessages() {
-      messagesDiv.innerHTML = "";
-      messages.forEach((msg, index) => {
-        const div = document.createElement("div");
-        div.className = "msg " + (msg.self ? "self" : "other");
+function sendMessage(){
+  const text=msgInput.value.trim();
+  const file=fileInput.files[0];
+  if(!text && !file) return;
 
-        if (msg.type === "text") {
-          div.textContent = msg.content;
-        } else if (msg.type === "image") {
-          div.innerHTML = `<img src="${msg.content}" alt="Image"><div>${msg.name}</div>`;
-        } else {
-          div.innerHTML = `<a href="${msg.content}" download="${msg.name}">📂 ${msg.name}</a>`;
-        }
-
-        const delBtn = document.createElement("button");
-        delBtn.className = "delete-btn";
-        delBtn.textContent = "×";
-        delBtn.onclick = () => {
-          messages.splice(index, 1);
-          saveAndRender();
-        };
-
-        div.appendChild(delBtn);
-        messagesDiv.appendChild(div);
-      });
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      let type=file.type.startsWith("image/")?"image":file.type.startsWith("video/")?"video":"file";
+      messages.push({type,content:e.target.result,name:file.name,self:true});
+      saveAndRender();
+      previewDiv.innerHTML='';
     }
+    reader.readAsDataURL(file);
+  }
 
-    function saveAndRender() {
-      localStorage.setItem("messages", JSON.stringify(messages));
-      renderMessages();
-    }
-  </script>
+  if(text){
+    messages.push({type:"text",content:text,self:true});
+    saveAndRender();
+  }
+
+  msgInput.value=''; fileInput.value='';
+}
+
+function renderMessages(){
+  messagesDiv.innerHTML='';
+  messages.forEach((msg,index)=>{
+    const div=document.createElement('div');
+    div.className="msg "+(msg.self?"self":"other");
+    if(msg.type==="text") div.textContent=msg.content;
+    else if(msg.type==="image") div.innerHTML=`<img src="${msg.content}" alt="Image"><div>${msg.name}</div>`;
+    else if(msg.type==="video") div.innerHTML=`<video src="${msg.content}" controls></video><div>${msg.name}</div>`;
+    else div.innerHTML=`<a href="${msg.content}" download="${msg.name}">📂 ${msg.name}</a>`;
+
+    const delBtn=document.createElement("button");
+    delBtn.className="delete-btn"; delBtn.textContent="×";
+    delBtn.onclick=()=>{messages.splice(index,1); saveAndRender();}
+    div.appendChild(delBtn);
+
+    messagesDiv.appendChild(div);
+  });
+  messagesDiv.scrollTop=messagesDiv.scrollHeight;
+}
+
+function saveAndRender(){
+  localStorage.setItem("messages",JSON.stringify(messages));
+  renderMessages();
+}
+</script>
 </body>
 </html>
