@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rithm Notes - Sticky Wall</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+  body {
+    height:100vh;
+    background: linear-gradient(135deg,#a0eaff,#ffd1f0,#fff8b0,#ffffff);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  header{
+    padding:1rem;
+    font-size:1.5rem;
+    font-weight:600;
+    color:#fff;
+    background: linear-gradient(90deg,#a0eaff,#ffd1f0,#fff8b0);
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  }
+  #noteContainer{
+    flex:1;
+    position:relative;
+    padding:1rem;
+    overflow:auto;
+  }
+  .note {
+    position:absolute;
+    width:180px;
+    min-height:150px;
+    padding:12px;
+    border-radius:12px;
+    cursor:grab;
+    font-size:0.95rem;
+    font-weight:500;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    transform: rotate(var(--rotate));
+    background: linear-gradient(135deg,var(--bg1),var(--bg2));
+    transition: transform 0.2s;
+    display:flex;
+    flex-direction:column;
+  }
+  .note textarea {
+    flex:1;
+    border:none;
+    background:transparent;
+    resize:none;
+    outline:none;
+    font-family:'Poppins',sans-serif;
+    color:#111;
+  }
+  .note .deleteBtn{
+    background:#ff4b4b;
+    border:none;
+    border-radius:50%;
+    width:22px;
+    height:22px;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    align-self:flex-end;
+    margin-bottom:4px;
+  }
+  #addNoteBtn{
+    padding:12px 20px;
+    margin:1rem;
+    border:none;
+    border-radius:12px;
+    background: linear-gradient(135deg,#ffd1f0,#a0eaff,#fff8b0);
+    color:#111;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+  #addNoteBtn:hover{transform:scale(1.05);}
+</style>
+</head>
+<body>
+<header>📝 Rithm Sticky Notes Wall</header>
+<button id="addNoteBtn">+ Add Note</button>
+<div id="noteContainer"></div>
+
+<script>
+const noteContainer=document.getElementById('noteContainer');
+const addNoteBtn=document.getElementById('addNoteBtn');
+
+let notes=JSON.parse(localStorage.getItem('notes'))||[];
+
+// utility functions
+function randomRotation(){return (Math.random()*12-6)+'deg';}
+function randomColor(){ 
+  const colors=[['#a0eaff','#ffd1f0'],['#ffd1f0','#fff8b0'],['#fff8b0','#a0eaff'],['#ffb3ff','#a0eaff']];
+  return colors[Math.floor(Math.random()*colors.length)];
+}
+
+// render notes
+function renderNotes(){
+  noteContainer.innerHTML='';
+  notes.forEach((note,index)=>{
+    const div=document.createElement('div');
+    div.className='note';
+    const [bg1,bg2]=note.colors;
+    div.style.setProperty('--bg1',bg1);
+    div.style.setProperty('--bg2',bg2);
+    div.style.setProperty('--rotate',note.rotate);
+    div.style.left=note.x+'px';
+    div.style.top=note.y+'px';
+
+    const delBtn=document.createElement('button');
+    delBtn.className='deleteBtn';
+    delBtn.textContent='×';
+    delBtn.onclick=()=>{notes.splice(index,1);saveNotes();renderNotes();}
+    div.appendChild(delBtn);
+
+    const ta=document.createElement('textarea');
+    ta.value=note.text;
+    ta.oninput=()=>{note.text=ta.value;saveNotes();}
+    div.appendChild(ta);
+
+    makeDraggable(div,index);
+
+    noteContainer.appendChild(div);
+  });
+}
+
+// save to localStorage
+function saveNotes(){localStorage.setItem('notes',JSON.stringify(notes));}
+
+// add new note
+addNoteBtn.onclick=()=>{
+  const [bg1,bg2]=randomColor();
+  const note={text:'',x:50,y:50,rotate:randomRotation(),colors:[bg1,bg2]};
+  notes.push(note);
+  saveNotes();
+  renderNotes();
+}
+
+// draggable
+function makeDraggable(el,index){
+  let offsetX=0,offsetY=0,isDragging=false;
+
+  el.addEventListener('mousedown',startDrag);
+  el.addEventListener('touchstart',startDrag);
+
+  function startDrag(e){
+    isDragging=true;
+    const rect=el.getBoundingClientRect();
+    const clientX=e.touches?e.touches[0].clientX:e.clientX;
+    const clientY=e.touches?e.touches[0].clientY:e.clientY;
+    offsetX=clientX-rect.left;
+    offsetY=clientY-rect.top;
+    document.addEventListener('mousemove',drag);
+    document.addEventListener('mouseup',endDrag);
+    document.addEventListener('touchmove',drag);
+    document.addEventListener('touchend',endDrag);
+  }
+
+  function drag(e){
+    if(!isDragging)return;
+    const clientX=e.touches?e.touches[0].clientX:e.clientX;
+    const clientY=e.touches?e.touches[0].clientY:e.clientY;
+    let x=clientX-offsetX;
+    let y=clientY-offsetY;
+    if(x<0)x=0;
+    if(y<0)y=0;
+    if(x>noteContainer.clientWidth-180)x=noteContainer.clientWidth-180;
+    if(y>noteContainer.clientHeight-150)y=noteContainer.clientHeight-150;
+    el.style.left=x+'px';
+    el.style.top=y+'px';
+    notes[index].x=x;
+    notes[index].y=y;
+  }
+
+  function endDrag(){
+    isDragging=false;
+    saveNotes();
+    document.removeEventListener('mousemove',drag);
+    document.removeEventListener('mouseup',endDrag);
+    document.removeEventListener('touchmove',drag);
+    document.removeEventListener('touchend',endDrag);
+  }
+}
+
+// initial render
+renderNotes();
+</script>
+</body>
+</html>

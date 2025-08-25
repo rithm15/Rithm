@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rithm Calendar & To-Do</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+  body{
+    background: linear-gradient(135deg,#a0eaff,#ffd1f0,#fff8b0,#ffffff);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:1rem;
+    color:#111;
+  }
+  header{
+    font-size:2rem;
+    font-weight:700;
+    margin-bottom:1rem;
+    color:#ff69b4;
+    text-shadow: 1px 1px 5px #ffffffaa;
+    text-align:center;
+  }
+  .calendar-container{
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius:18px;
+    padding:1rem;
+    width:100%;
+    max-width:500px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    margin-bottom:1.5rem;
+  }
+  .month{
+    text-align:center;
+    font-weight:600;
+    font-size:1.4rem;
+    margin-bottom:0.5rem;
+    color:#ff69b4;
+  }
+  .weekdays, .days{
+    display:grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align:center;
+  }
+  .weekdays div{
+    font-weight:600;
+    color:#555;
+    padding:5px 0;
+  }
+  .days div{
+    padding:10px 0;
+    margin:2px;
+    border-radius:8px;
+    transition:0.2s;
+    cursor:pointer;
+  }
+  .days div.today{
+    background: linear-gradient(135deg,#fffb7d,#ffb3ff);
+    box-shadow:0 0 10px rgba(255,182,193,0.5);
+    font-weight:700;
+  }
+  .days div.marked{
+    background: linear-gradient(135deg,#a0eaff,#ffd1f0);
+    font-weight:700;
+  }
+  .days div:hover{
+    transform:scale(1.1);
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  }
+  .todo-container{
+    width:100%;
+    max-width:500px;
+    display:flex;
+    flex-direction:column;
+    gap:0.8rem;
+    margin-bottom:2rem;
+  }
+  .todo-card{
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    padding:1rem;
+    border-radius:16px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.1);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:0.2s;
+  }
+  .todo-card:hover{
+    transform:scale(1.02);
+    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+  }
+  .todo-card span{
+    font-weight:500;
+    color:#333;
+  }
+  .todo-card button{
+    background: #ff69b4;
+    border:none;
+    color:#fff;
+    padding:6px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.2s;
+  }
+  .todo-card button:hover{
+    box-shadow:0 0 10px #ff69b4aa;
+  }
+  .add-todo{
+    display:flex;
+    gap:0.5rem;
+    margin-bottom:1rem;
+  }
+  .add-todo input{
+    flex:1;
+    padding:10px;
+    border-radius:12px;
+    border:none;
+    outline:none;
+    background: rgba(255,255,255,0.7);
+  }
+  .add-todo button{
+    background:#ff69b4;
+    border:none;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:12px;
+    cursor:pointer;
+  }
+  .add-todo button:hover{box-shadow:0 0 10px #ff69b4aa;}
+  footer{
+    margin-top:auto;
+    text-align:center;
+    font-size:0.9rem;
+    color:#555;
+    padding:1rem;
+  }
+</style>
+</head>
+<body>
+
+<header>📅 My Calendar & To-Do</header>
+
+<div class="calendar-container">
+  <div class="month" id="monthYear"></div>
+  <div class="weekdays">
+    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+  </div>
+  <div class="days" id="calendarDays"></div>
+</div>
+
+<div class="add-todo">
+  <input type="text" id="newTodo" placeholder="Add new task or date...">
+  <button onclick="addTodo()">➕ Add</button>
+</div>
+
+<div class="todo-container" id="todoList">
+  <!-- To-Do cards -->
+</div>
+
+<footer>© 2025 Rithm. All rights reserved.</footer>
+
+<script>
+const calendarDays = document.getElementById("calendarDays");
+const monthYear = document.getElementById("monthYear");
+const todoList = document.getElementById("todoList");
+const newTodo = document.getElementById("newTodo");
+
+const today = new Date();
+let currentDay = today.getDate();
+let currentMonth = today.getMonth();
+let currentYear = today.getFullYear();
+
+const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+// Load saved todos and marked dates
+let todos = JSON.parse(localStorage.getItem('rithmTodos')) || [];
+let markedDates = JSON.parse(localStorage.getItem('rithmMarkedDates')) || [];
+
+function generateCalendar(){
+  const firstDay = new Date(currentYear,currentMonth,1).getDay();
+  const daysInMonth = new Date(currentYear,currentMonth+1,0).getDate();
+  calendarDays.innerHTML='';
+  for(let i=0;i<firstDay;i++){calendarDays.appendChild(document.createElement('div'));}
+  for(let day=1;day<=daysInMonth;day++){
+    const dayDiv=document.createElement('div');
+    dayDiv.textContent=day;
+    if(day===currentDay) dayDiv.classList.add('today');
+    if(markedDates.includes(day)) dayDiv.classList.add('marked');
+    dayDiv.onclick=()=>{
+      if(!markedDates.includes(day)) markedDates.push(day);
+      else markedDates = markedDates.filter(d=>d!==day);
+      localStorage.setItem('rithmMarkedDates', JSON.stringify(markedDates));
+      generateCalendar();
+    }
+    calendarDays.appendChild(dayDiv);
+  }
+}
+generateCalendar();
+
+function renderTodos(){
+  todoList.innerHTML='';
+  todos.forEach((item,index)=>{
+    const card=document.createElement('div'); card.className='todo-card';
+    const span=document.createElement('span'); span.textContent=item;
+    const btn=document.createElement('button'); btn.textContent='✔';
+    btn.onclick=()=>{todos.splice(index,1); saveAndRender();}
+    card.appendChild(span); card.appendChild(btn);
+    todoList.appendChild(card);
+  });
+}
+renderTodos();
+
+function addTodo(){
+  const val = newTodo.value.trim();
+  if(val==='') return;
+  todos.push(val);
+  newTodo.value='';
+  saveAndRender();
+}
+
+function saveAndRender(){
+  localStorage.setItem('rithmTodos', JSON.stringify(todos));
+  renderTodos();
+  generateCalendar();
+}
+</script>
+
+</body>
+</html>
